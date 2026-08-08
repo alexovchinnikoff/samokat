@@ -1,4 +1,4 @@
-Выводит список логинов курьеров с количеством их заказов в статусе «В доставке» (поле inDelivery = true).  
+###Выводит список логинов курьеров с количеством их заказов в статусе «В доставке» (поле inDelivery = true).  
 SELECT c.login, 
        COUNT(o."inDelivery") AS all_orders_in_delivery, 
        COUNT(o.id) AS distinct_orders_in_delivery
