@@ -1,0 +1,13 @@
+🚀 Пытаемся создать заказ с данными: {'firstName': 'Ivan', 'lastName': 'Petrov', 'address': 'Polyanka, 35', 'metroStation': 4, 'phone': '+7 800 355 35 35', 'rentTime': 5, 'deliveryDate': '2026-07-18', 'comment': 'Pozvonit za chas', 'color': ['BLACK']}
+----------------------------------------
+📡 ОТВЕТ ОТ СЕРВЕРА (JSON):
+{'track': 413166}
+----------------------------------------
+Actual firstName: Ivan
+Expected firstName: Иван
+Actual lastName: Petrov
+Expected lastName: Петров
+Warning: API returned fixed firstName: Ivan instead of Иван
+Warning: API returned fixed lastName: Petrov instead of Петров
+🧹 Удаляем тестовый заказ: 413166
+⚠️ Предупреждение: заказ 413166 не был удален (статус 404)

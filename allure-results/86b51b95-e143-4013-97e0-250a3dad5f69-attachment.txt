@@ -1,0 +1,6 @@
+Creating courier with login: FglHh, password: HLe4rFSmFg
+Sending POST to create courier: {'login': 'FglHh', 'password': 'HLe4rFSmFg', 'firstName': 'EnBsmO'}
+Response data: {'ok': True}
+Attempting to login with: {'login': 'FglHh', 'password': 'HLe4rFSmFg'}
+Courier created and authenticated successfully
+Courier 779722 deleted successfully
