@@ -1,0 +1,10 @@
+🚀 Пытаемся создать заказ с данными: {'firstName': 'Ivan', 'lastName': 'Petrov', 'address': 'Polyanka, 35', 'metroStation': 4, 'phone': '+7 800 355 35 35', 'rentTime': 5, 'deliveryDate': '2026-07-18', 'comment': 'Pozvonit za chas', 'color': ['BLACK']}
+----------------------------------------
+📡 ОТВЕТ ОТ СЕРВЕРА (JSON):
+{'track': 100578}
+----------------------------------------
+Server delivery date: 2026-07-18
+Request delivery date: 2024-12-31
+Warning: API uses default delivery date 2026-07-18 instead of 2024-12-31
+🧹 Удаляем тестовый заказ: 100578
+⚠️ Предупреждение: заказ 100578 не был удален (статус 404)
