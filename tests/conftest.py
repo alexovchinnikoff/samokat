@@ -1,42 +1,42 @@
 # tests/conftest.py
 import pytest
-# ВАЖНО: Импортируем напрямую из scooters_api, так как sender.py удален
 from api.scooters_api import create_order, get_order_info, delete_order
 from data.order_data import new_order_body
 
 @pytest.fixture
 def test_order():
-    """
-    Фикстура: создаёт тестовый заказ, возвращает трек-номер.
-    Гарантированно удаляет заказ после завершения теста.
-    """
     track = None
 
-    # --- SETUP: Создание заказа ---
     try:
-        # Используем данные из data/order_data.py
+        # 1. Создаем заказ
         response = create_order(new_order_body)
-        
-        print(f"🚀 Создан заказ. Статус: {response.status_code}")
         
         if response.status_code not in [200, 201]:
             pytest.fail(f"❌ Не удалось создать заказ. Статус: {response.status_code}, Ответ: {response.text}")
 
-        # Парсим трек-номер из ответа
+        # 2. ПРАВИЛЬНО достаем трек из вложенности
         data = response.json()
-        track = data.get("track") # Или как называется поле в твоем API
+        
+        # Твой ответ выглядит так: {"order": {"track": 123, ...}}
+        # Поэтому сначала берем объект order, потом поле track
+        order_data = data.get("order")
+        
+        if not order_data:
+            pytest.fail("❌ В ответе API нет объекта 'order'")
+            
+        track = order_data.get("track")
         
         if not track:
-            pytest.fail("❌ В ответе API не найден трек-номер заказа")
+            pytest.fail("❌ В объекте 'order' не найден трек-номер")
             
+        print(f"✅ Заказ создан! Трек-номер: {track}")
+
     except Exception as e:
         pytest.fail(f"❌ Ошибка при создании заказа: {e}")
 
-    # Передаем трек-номер в тест
     yield track
 
-    # --- TEARDOWN: Очистка (удаление заказа) ---
-    # Этот блок выполнится ВСЕГДА, даже если тест упал
+    # 3. Очистка (удаление заказа)
     if track:
         try:
             print(f"🧹 Удаляем тестовый заказ: {track}")
@@ -44,17 +44,11 @@ def test_order():
             
             if delete_response.status_code != 200:
                 print(f"⚠️ Предупреждение: заказ {track} не был удален (статус {delete_response.status_code})")
-                # Не делаем pytest.fail здесь, чтобы не ломать сам тест очистки, 
-                # но логируем проблему.
         except Exception as e:
             print(f"⚠️ Ошибка при удалении заказа {track}: {e}")
 
 @pytest.fixture
 def order_info_response(test_order):
-    """
-    Получает информацию о заказе по трек-номеру.
-    Зависит от фикстуры test_order (которая уже создала заказ).
-    """
     track = test_order
     response = get_order_info(track)
     
