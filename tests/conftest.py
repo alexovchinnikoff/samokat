@@ -3,36 +3,49 @@ import pytest
 from api.scooters_api import create_order, get_order_info, delete_order
 from data.order_data import new_order_body
 
+
 @pytest.fixture
 def test_order():
     track = None
 
     try:
         # 1. Создаем заказ
+        print(f"🚀 Пытаемся создать заказ с данными: {new_order_body}")
         response = create_order(new_order_body)
-        
-        if response.status_code not in [200, 201]:
-            pytest.fail(f"❌ Не удалось создать заказ. Статус: {response.status_code}, Ответ: {response.text}")
 
-        # 2. ПРАВИЛЬНО достаем трек из вложенности
+        # 2. ВАЖНО: Выводим полный сырой ответ сервера в консоль
+        # Это поможет тебе увидеть реальную структуру или ошибку
+        print("-" * 40)
+        print("📡 ОТВЕТ ОТ СЕРВЕРА (JSON):")
+        try:
+            print(response.json())
+        except:
+            print(response.text)  # Если это не JSON (например, HTML страница ошибки)
+        print("-" * 40)
+
+        # 3. Проверка статуса
+        if response.status_code not in [200, 201]:
+            pytest.fail(f"❌ Статус не 200/201. Получено: {response.status_code}. Ответ: {response.text}")
+
+        # 4. Парсинг трека (универсальный вариант)
         data = response.json()
-        
-        # Твой ответ выглядит так: {"order": {"track": 123, ...}}
-        # Поэтому сначала берем объект order, потом поле track
-        order_data = data.get("order")
-        
-        if not order_data:
-            pytest.fail("❌ В ответе API нет объекта 'order'")
-            
-        track = order_data.get("track")
-        
+
+        # Логика: пробуем найти трек в разных местах, чтобы тест не падал сразу
+        if "order" in data:
+            order_data = data["order"]
+            track = order_data.get("track")
+        elif "track" in data:
+            track = data.get("track")
+        else:
+            # Если структура совсем другая, выводим ключи, чтобы понять, что там есть
+            print(f"⚠️ Неизвестная структура ответа. Ключи: {list(data.keys())}")
+            pytest.fail("❌ Не удалось найти трек-номер в ответе API")
+
         if not track:
-            pytest.fail("❌ В объекте 'order' не найден трек-номер")
-            
-        print(f"✅ Заказ создан! Трек-номер: {track}")
+            pytest.fail("❌ В ответе API не найден трек-номер")
 
     except Exception as e:
-        pytest.fail(f"❌ Ошибка при создании заказа: {e}")
+        pytest.fail(f"❌ Критическая ошибка при создании заказа: {e}")
 
     yield track
 
