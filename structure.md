@@ -6,26 +6,38 @@
 
 ```text
 D:\Projects\samokat_root/
-├── tests/                          # 🧪 Каталог с автотестами
-│   ├── test_cases/                 #    ├── __init__.py
-│   │   ├── test_casestest_order_customer.py      # Тесты проверки данных клиента
-│   │   ├── test_casestest_order_dates.py        # Тесты проверки дат заказа
-│   │   ├── test_casestest_order_optional.py    # Тесты опциональных полей
-│   │   ├── test_casestest_order_status.py       # Тесты статусов заказа
-│   │   └── test_courrier_create.py              # Тест создания курьера
-│   ├── helpers/                   #    ├── __init__.py
-│   │   ├── assertions.py          #       Функции проверок (assertions)
-│   │   └── utils.py               #       Вспомогательные утилиты
-│   └── __init__.py
-├── api/                            # 🌐 Модуль взаимодействия с API
+├── .gitignore                # (обязательно создай этот файл!)
+├── requirements.txt          # Список библиотек для установки
+├── run_tests.bat             # Скрипт запуска (для Windows)
+│
+├── api/                      # 🌐 Логика работы с API (не сами тесты!)
 │   ├── __init__.py
-│   ├── config.py                  #   Конфигурация (URL, заголовки)
-│   ├── sender.py                  #   Логика отправки HTTP‑запросов
-│   └── scooters_api.py           #   Обертки над методами API (курьеры, заказы)
-├── data/                           # 📦 Тестовые данные
+│   ├── config.py             # URL стенда, заголовки, токены
+│   ├── sender.py            # Функции отправки GET/POST/PATCH запросов
+│   └── scooters_api.py      # Обертки: "создать заказ", "получить курьера"
+│
+├── data/                     # 📦 Только данные (JSON, словари, классы данных)
 │   ├── __init__.py
-│   └── order_data.py              #   Шаблоны данных для создания заказов
-├── reports/                        # 📄 Отчёты по результатам тестов
-│   └── latest/                     #   Папка для последних отчётов (генерируется автоматически)
-├── logs/                           # 📜 Логи выполнения тестов
-└── requirements.txt                # 📦 Зависимости проекта (библиотеки)
+│   └── order_data.py        # Шаблоны тел запросов (payloads)
+│
+├── tests/                    # 🧪 Только тесты (ничего лишнего!)
+│   ├── __init__.py
+│   ├── conftest.py          # Фикстуры (setup/teardown, общие переменные)
+│   ├── test_cases/          # Сами файлы с тестами
+│   │   ├── __init__.py
+│   │   ├── test_casestest_order_customer.py
+│   │   ├── test_casestest_order_dates.py
+│   │   ├── test_casestest_order_optional.py
+│   │   ├── test_casestest_order_status.py
+│   │   └── test_courrier_create.py
+│   ├── helpers/             # Вспомогательные функции (assertions, utils)
+│   │   ├── __init__.py
+│   │   ├── assertions.py    # Твои кастомные проверки (если нужны)
+│   │   └── utils.py         # Генераторы случайных данных и т.д.
+│   │
+│   ├── reports/              # Сюда Allure будет складывать отчеты
+│   │   └── latest/          # (папка создастся автоматически при запуске)
+│   └── logs/                # Сюда можно писать свои логи
+│
+├── allure-results/           # (папка создастся автоматически при запуске)
+└── README.md                # Описание проекта (как мы делали выше)
