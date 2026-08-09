@@ -7,8 +7,6 @@ from helpers.assertions import (
     check_boolean_fields,
     check_courier_field
 )
-from tests.fixtures.order_fixtures import order_info_response, test_order
-
 
 class TestOrderOptionalFields:
     """Проверяет опциональные поля color и comment, если они есть в ответе"""
